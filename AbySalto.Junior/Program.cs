@@ -10,36 +10,20 @@ namespace AbySalto.Junior
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
-
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Restaurant", Version = "v1" });
-            });
-
-            builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+            builder.Services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "Restaurant", Version = "v1" }); });
+            builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             var app = builder.Build();
-
-            if (app.Environment.IsDevelopment())
+            if(app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
                 app.UseSwagger();
-                app.UseSwaggerUI(options =>
-                {
-                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-                    options.RoutePrefix = string.Empty;
-                });
+                app.UseSwaggerUI(options => { options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1"); options.RoutePrefix = string.Empty; });
             }
-
             app.UseHttpsRedirection();
             app.UseAuthorization();
-
-
             app.MapControllers();
             app.Run();
         }
