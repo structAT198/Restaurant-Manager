@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AbySalto.Junior.Objects;
+using Microsoft.AspNetCore.Mvc;
 
-namespace AbySalto.Junior.Objects
+namespace AbySalto.Junior.Controllers
 {
     public class RestaurantController : Controller
     {
