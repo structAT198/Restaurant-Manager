@@ -17,7 +17,7 @@ namespace AbySalto.Junior.Infrastructure.Database
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
             modelBuilder.Entity<Order>().OwnsOne(order => order.delivery_address);
-            modelBuilder.Entity<Order>().HasMany(order => order.products).WithOne().HasForeignKey(product => product.order_ID).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Order>().HasMany(order => order.products).WithOne(product => product.Order).HasForeignKey(product => product.order_ID).OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Order>().Property(order => order.state).HasConversion<string>();
             modelBuilder.Entity<Order>().Property(order => order.payment_type).HasConversion<string>();
             modelBuilder.Entity<Order>().Property(order => order.time).HasConversion(value => value.ToTimeSpan(), value => TimeOnly.FromTimeSpan(value));

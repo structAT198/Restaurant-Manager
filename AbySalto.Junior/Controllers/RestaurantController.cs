@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AbySalto.Junior.Controllers
 {
+    [ApiController]
     public class RestaurantController : Controller
     {
         private readonly ApplicationDbContext database_context;
@@ -17,11 +18,12 @@ namespace AbySalto.Junior.Controllers
 
         [HttpPost]
         [Route("restaurant_server/create_new_order")]
-        public async Task<IActionResult> Create_New_Order(Order new_order)
+        public async Task<IActionResult> Create_New_Order([FromBody] Order new_order)
         {
             new_order.price_total = 0.0f;
             foreach(Ordered_Product product in new_order.products)
             {
+                product.Order = new_order;
                 new_order.price_total += (product.price * product.quantity);
             }
             database_context.orders.Add(new_order);
@@ -42,7 +44,7 @@ namespace AbySalto.Junior.Controllers
         [Route("restaurant_server/get_orders")]
         public IActionResult Get_Orders()
         {
-            var orders = database_context.orders.ToList();
+            var orders = database_context.orders.Include(order => order.products).ToList();
             return Ok(orders);
         }
 
@@ -52,12 +54,12 @@ namespace AbySalto.Junior.Controllers
         {
             if(highest_price_first == true)
             {
-                var sorted_orders = database_context.orders.OrderByDescending(order => order.price_total).ToList();
+                var sorted_orders = database_context.orders.OrderByDescending(order => order.price_total).Include(order => order.products).ToList();
                 return Ok(sorted_orders);
             }
             else
             {
-                var sorted_orders = database_context.orders.OrderBy(order => order.price_total).ToList();
+                var sorted_orders = database_context.orders.OrderBy(order => order.price_total).Include(order => order.products).ToList();
                 return Ok(sorted_orders);
             }
         }

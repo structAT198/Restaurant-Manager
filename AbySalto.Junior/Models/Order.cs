@@ -1,12 +1,11 @@
 using AbySalto.Junior.Primitives;
-using Microsoft.Identity.Client;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace AbySalto.Junior.Models
 {
     public class Order
     {
+        [JsonIgnore]
         public long ID { get; set; }
         public string customer_name { get; set; }
         public states state { get; set; }

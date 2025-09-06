@@ -1,6 +1,6 @@
 using AbySalto.Junior.Models;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.Text.Json.Serialization;
 
 namespace AbySalto.Junior.Primitives
 {
@@ -21,8 +21,13 @@ namespace AbySalto.Junior.Primitives
     }
     public class Ordered_Product
     {
+        [JsonIgnore]
         public long ID { get; set; }
+        [JsonIgnore]
         public long order_ID { get; set; }
+        [JsonIgnore]
+        [ValidateNever]
+        public Order Order { get; set; }
         public string name { get; set; }
         public int quantity { get; set; }
         public float price { get; set; }
