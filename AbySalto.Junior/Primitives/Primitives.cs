@@ -1,3 +1,7 @@
+using AbySalto.Junior.Models;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace AbySalto.Junior.Primitives
 {
     public enum states
@@ -7,7 +11,7 @@ namespace AbySalto.Junior.Primitives
         in_progress,
         completed
     }
-    public struct address
+    public class Address
     {
         public string street { get; set; }
         public string house_number { get; set; }
@@ -15,8 +19,10 @@ namespace AbySalto.Junior.Primitives
         public string city { get; set; }
         public string country { get; set; }
     }
-    public struct product
+    public class Ordered_Product
     {
+        public long ID { get; set; }
+        public long order_ID { get; set; }
         public string name { get; set; }
         public int quantity { get; set; }
         public float price { get; set; }

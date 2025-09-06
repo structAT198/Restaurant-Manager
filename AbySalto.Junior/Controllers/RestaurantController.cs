@@ -15,49 +15,70 @@ namespace AbySalto.Junior.Controllers
             this.database_context = database_context;
         }
 
-        [HttpGet]
-        [Route("api/create_test_order")]
-        public IActionResult Create_Sample_Order()
+        [HttpPost]
+        [Route("restaurant_server/create_new_order")]
+        public async Task<IActionResult> Create_New_Order(Order new_order)
         {
-            Order test_order = new Order();
-            test_order.customer_name = "Marko Markic";
-            test_order.state = states.in_progress;
-            test_order.time = TimeOnly.FromDateTime(DateTime.Now);
-            test_order.payment_type = payment_types.cash_on_delivery;
-            address delivery_address = new address();
-            delivery_address.street = "Ulica Bukava";
-            delivery_address.house_number = "22b";
-            delivery_address.postcode = 10203;
-            delivery_address.city = "Zagreb";
-            delivery_address.country = "Croatia";
-            test_order.delivery_address = delivery_address;
-            test_order.contact_number = "+385910000000";
-            test_order.note = "Drugi kat.";
-            product product_1 = new product();
-            product_1.name = "Sok";
-            product_1.quantity = 1;
-            product_1.price = 1.39f;
-            product product_2 = new product();
-            product_2.name = "Bonboni";
-            product_2.quantity = 2;
-            product_2.price = 2.19f;
-            test_order.products.Add(product_1);
-            test_order.products.Add(product_2);
-            test_order.price_total = 0.0f;
-            foreach(product current_product in test_order.products)
+            new_order.price_total = 0.0f;
+            foreach(Ordered_Product product in new_order.products)
             {
-                test_order.price_total += current_product.price;
+                new_order.price_total += (product.price * product.quantity);
             }
-            test_order.currency = "EUR";
-            return Ok(test_order);
+            database_context.orders.Add(new_order);
+            try
+            {
+                await database_context.SaveChangesAsync();
+                return Ok(new_order);
+            }
+            catch(Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+                return StatusCode(500, "Database error.");
+            }
+            
         }
 
         [HttpGet]
-        [Route("api/dbtest")]
-        public async Task<ActionResult<Order>> Get_From_DB()
+        [Route("restaurant_server/get_orders")]
+        public IActionResult Get_Orders()
         {
-            var orders = await database_context.orders.ToListAsync();
+            var orders = database_context.orders.ToList();
             return Ok(orders);
+        }
+
+        [HttpGet]
+        [Route("restaurant_server/get_orders_sorted")]
+        public IActionResult Get_Orders_Sorted(bool highest_price_first)
+        {
+            if(highest_price_first == true)
+            {
+                var sorted_orders = database_context.orders.OrderByDescending(order => order.price_total).ToList();
+                return Ok(sorted_orders);
+            }
+            else
+            {
+                var sorted_orders = database_context.orders.OrderBy(order => order.price_total).ToList();
+                return Ok(sorted_orders);
+            }
+        }
+
+        [HttpPut]
+        [Route("restaurant_server/change_order_status")]
+        public async Task<IActionResult> Change_Order_State(long order_ID, states new_state)
+        {
+            var order = database_context.orders.Find(order_ID);
+            order.state = new_state;
+            try
+            {
+                await database_context.SaveChangesAsync();
+                return Ok(order);
+            }
+            catch(Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+                return StatusCode(500, "Database error.");
+            }
+            
         }
     }
 }
