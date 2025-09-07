@@ -19,7 +19,7 @@ namespace AbySalto.Junior.Primitives
         public string city { get; set; }
         public string country { get; set; }
     }
-    public class Ordered_Product
+    public class Ordered_Product_DB
     {
         [JsonIgnore]
         public long ID { get; set; }
@@ -27,7 +27,13 @@ namespace AbySalto.Junior.Primitives
         public long order_ID { get; set; }
         [JsonIgnore]
         [ValidateNever]
-        public Order Order { get; set; }
+        public Order_DB Order_DB { get; set; }
+        public string name { get; set; }
+        public int quantity { get; set; }
+        public float price { get; set; }
+    }
+    public class Ordered_Product
+    {
         public string name { get; set; }
         public int quantity { get; set; }
         public float price { get; set; }
