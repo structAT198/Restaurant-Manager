@@ -36,10 +36,19 @@ function App()
 {
     const [view, Set_View] = useState<number | null>(null);
     const [orders, Set_Orders] = useState<Order[] | null>(null);
-    //const [new_products, Set_New_Products] = useState<Ordered_Product[]>([{...empty_product}])
-    //const [new_order, Set_New_Order] = useState<Order>({...empty_order});
+    const [new_products, Set_New_Products] = useState<Ordered_Product[]>([{...empty_product}])
+    const [new_order, Set_New_Order] = useState<Order>({...empty_order});
     const [changed_order_ID, Set_Changed_Order_ID] = useState<number>(0);
     const [changed_order_state, Set_Changed_Order_State] = useState<number>(0);
+    async function Handle_Create_Order()
+    {
+        new_order.products[0] = new_products[0];
+        const created_order : Order = await Create_New_Order(new_order);
+        Set_Orders(null);
+        Set_Orders([created_order]);
+        Set_View(1);
+    }
+
     async function Handle_Get_Orders_Button_Click()
     {
         Set_View(1);
@@ -67,7 +76,83 @@ function App()
         {
             view_content = 
             (
-                <p className="IO_Container_String">Sorry not implemented yet. If you want to test sending data, use Change Order Status.</p>
+                <div className="IO_Container_Create_Order_Status_Object">
+                    <p className="IO_Container_String">
+                        <strong>Customer Name:</strong>
+                        <input type="text" className="IO_Input_Box" onFocus={e => e.currentTarget.addEventListener('wheel', (e: WheelEvent) => {e.preventDefault();}, { passive: false })} onChange={(event) => Set_New_Order({...new_order, customer_name : event.target.value})}></input>
+                    </p>
+                    <p className="IO_Container_String">
+                        <strong>State:</strong>
+                        <select className="IO_Selection_Box" onChange={(event) => Set_New_Order({...new_order, state : Number(event.target.value)})}>
+                            {Object.entries(order_states).filter(([key, _]) => !isNaN(Number(key))).map(([key, label]) =>
+                            (
+                                <option key={key} value={key}>
+                                    {label}
+                                </option>
+                            ))}
+                        </select>
+                    </p>
+                    <p className="IO_Container_String">
+                        <strong>Time:</strong>
+                        <input type="text" className="IO_Input_Box" onFocus={e => e.currentTarget.addEventListener('wheel', (e: WheelEvent) => {e.preventDefault();}, { passive: false })} onChange={(event) => Set_New_Order({...new_order, time : event.target.value})}></input>
+                    </p>
+                    <p className="IO_Container_String">
+                        <strong>Payment Type:</strong>
+                        <select className="IO_Selection_Box" onChange={(event) => Set_New_Order({...new_order, payment_type : Number(event.target.value)})}>
+                            {Object.entries(payment_types).filter(([key, _]) => !isNaN(Number(key))).map(([key, label]) =>
+                            (
+                                <option key={key} value={key}>
+                                    {label}
+                                </option>
+                            ))}
+                        </select>
+                    </p>
+                    <p className="IO_Container_String">
+                        <strong>Street:</strong>
+                        <input type="text" className="IO_Input_Box" onFocus={e => e.currentTarget.addEventListener('wheel', (e: WheelEvent) => {e.preventDefault();}, { passive: false })} onChange={(event) => Set_New_Order({...new_order, delivery_address : { ...new_order.delivery_address, street : event.target.value}})}></input>
+                    </p>
+                    <p className="IO_Container_String">
+                        <strong>House Number:</strong>
+                        <input type="text" className="IO_Input_Box" onFocus={e => e.currentTarget.addEventListener('wheel', (e: WheelEvent) => {e.preventDefault();}, { passive: false })} onChange={(event) => Set_New_Order({...new_order, delivery_address : { ...new_order.delivery_address, house_number : event.target.value}})}></input>
+                    </p>
+                    <p className="IO_Container_String">
+                        <strong>Postcode:</strong>
+                        <input type="number" className="IO_Input_Box" min={0} onFocus={e => e.currentTarget.addEventListener('wheel', (e: WheelEvent) => {e.preventDefault();}, { passive: false })} onChange={(event) => Set_New_Order({...new_order, delivery_address : { ...new_order.delivery_address, postcode : Number(event.target.value)}})}></input>
+                    </p>
+                    <p className="IO_Container_String">
+                        <strong>City:</strong>
+                        <input type="text" className="IO_Input_Box" onFocus={e => e.currentTarget.addEventListener('wheel', (e: WheelEvent) => {e.preventDefault();}, { passive: false })} onChange={(event) => Set_New_Order({...new_order, delivery_address : { ...new_order.delivery_address, city : event.target.value}})}></input>
+                    </p>
+                    <p className="IO_Container_String">
+                        <strong>Country:</strong>
+                        <input type="text" className="IO_Input_Box" onFocus={e => e.currentTarget.addEventListener('wheel', (e: WheelEvent) => {e.preventDefault();}, { passive: false })} onChange={(event) => Set_New_Order({...new_order, delivery_address : { ...new_order.delivery_address, country : event.target.value}})}></input>
+                    </p>
+                    <p className="IO_Container_String">
+                        <strong>Contact Number:</strong>
+                        <input type="text" className="IO_Input_Box" onFocus={e => e.currentTarget.addEventListener('wheel', (e: WheelEvent) => {e.preventDefault();}, { passive: false })} onChange={(event) => Set_New_Order({...new_order, contact_number : event.target.value})}></input>
+                    </p>
+                    <p className="IO_Container_String">
+                        <strong>Note:</strong>
+                        <input type="text" className="IO_Input_Box" onFocus={e => e.currentTarget.addEventListener('wheel', (e: WheelEvent) => {e.preventDefault();}, { passive: false })} onChange={(event) => Set_New_Order({...new_order, note : event.target.value})}></input>
+                    </p>
+                    <p className="IO_Container_String">
+                        <strong>Product Name:</strong>
+                        <input type="text" className="IO_Input_Box" onFocus={e => e.currentTarget.addEventListener('wheel', (e: WheelEvent) => {e.preventDefault();}, { passive: false })} onChange={(event) => Set_New_Products(new_products => [{...new_products[0], name : event.target.value }, ...new_products.slice(1)])}></input>
+                    </p>
+                    <p className="IO_Container_String">
+                        <strong>Product Quantity:</strong>
+                        <input type="number" className="IO_Input_Box" onFocus={e => e.currentTarget.addEventListener('wheel', (e: WheelEvent) => {e.preventDefault();}, { passive: false })} onChange={(event) => Set_New_Products(new_products => [{...new_products[0], quantity : Number(event.target.value) }, ...new_products.slice(1)])}></input>
+                    </p>
+                    <p className="IO_Container_String">
+                        <strong>Unit Price:</strong>
+                        <input type="number" className="IO_Input_Box" onFocus={e => e.currentTarget.addEventListener('wheel', (e: WheelEvent) => {e.preventDefault();}, { passive: false })} onChange={(event) => Set_New_Products(new_products => [{...new_products[0], price : Number(event.target.value) }, ...new_products.slice(1)])}></input>
+                    </p>
+                    <p className="IO_Container_String">
+                        <strong>Currency:</strong>
+                        <input type="text" className="IO_Input_Box" onFocus={e => e.currentTarget.addEventListener('wheel', (e: WheelEvent) => {e.preventDefault();}, { passive: false })} onChange={(event) => Set_New_Order({...new_order, currency : event.target.value})}></input>
+                    </p>
+                    <div className="IO_Create_Button" onClick={ Handle_Create_Order }>Create</div>
+                </div>
             );
             break;
         }
