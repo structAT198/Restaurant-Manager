@@ -23,6 +23,7 @@ export interface Ordered_Product
 
 export interface Order
 {
+    id : number;
     customer_name : string;
     state : number;
     time: string;

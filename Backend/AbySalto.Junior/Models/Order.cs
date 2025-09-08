@@ -5,7 +5,6 @@ namespace AbySalto.Junior.Models
 {
     public class Order_DB
     {
-        [JsonIgnore]
         public long ID { get; set; }
         public string customer_name { get; set; }
         public states state { get; set; }
@@ -20,6 +19,7 @@ namespace AbySalto.Junior.Models
     }
     public class Order
     {
+        public long ID { get; set; }
         public string customer_name { get; set; }
         public states state { get; set; }
         public TimeOnly time { get; set; }

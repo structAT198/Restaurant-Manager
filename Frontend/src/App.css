@@ -116,6 +116,64 @@
     margin: 0px;
 }
 
+.IO_Container_Change_Order_Status_Object
+{
+    width: 100%;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    background-color: rgb(240, 240, 240);
+    border-bottom: 1px solid rgb(202, 202, 202);;
+    align-items: center;
+}
+
+.IO_Container_Input_String
+{
+    margin-left: 10px;
+}
+
+.IO_Input_Box
+{
+    margin-left: 10px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.IO_Input_Box:focus
+{
+    outline: none;
+    box-shadow: none;
+}
+
+.IO_Selection_Box
+{
+    height: 28px;
+    line-height: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.IO_Selection_Box:focus
+{
+    outline: none;
+    box-shadow: none;
+}
+
+.IO_Execute_Button
+{
+    width : 100px; 
+    height : 28px;
+    background-color : rgb(255, 36, 36);
+    border-radius: 4px;
+    text-align: center;
+    color: white;
+    padding-top: 2px;
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: 4px;
+    justify-self: end;
+}
+
 .IO_Container_Header
 {
     position: sticky;
